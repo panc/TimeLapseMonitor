@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{65248d22-ddc8-4b44-a0df-a6160d0b6cc5}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <StartupFile>app.js</StartupFile>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -89,7 +89,6 @@
     <Folder Include="api\controllers" />
     <Folder Include="api\models" />
     <Folder Include="api\responses" />
-    <Folder Include="api\services" />
     <Folder Include="assets" />
     <Folder Include="assets\images" />
     <Folder Include="assets\js" />
