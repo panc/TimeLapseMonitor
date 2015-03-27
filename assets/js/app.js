@@ -2,7 +2,8 @@
 
 var tlm = angular.module('tlm', [
     'ui.bootstrap', 
-    'ui.router']);
+    'ui.router',
+    'sailsResource']);
 
 // configure the main module
 tlm.config([
