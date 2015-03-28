@@ -6,7 +6,7 @@ module.exports = {
 			type:'string',
 			required:true
 		},
-  		path:{
+  		url:{
   			type:'string',
   			required:true
   		}

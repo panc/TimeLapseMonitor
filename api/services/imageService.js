@@ -1,29 +1,29 @@
-var os = require('os');
 var fs = require('fs');
-var mkdirp = require('mkdirp');
 var path = require('path');
 
-var directory = path.join(process.cwd(), 'uploads/images');
-sails.log(directory);
+var IMAGE_PATH = 'camera';
+var directory = path.join(process.cwd(), IMAGE_PATH);
 
 module.exports = {
     reload: function () {
         
-        var platform = os.platform();
-        
-        if (platform.indexOf("win") == 0) {
-            sails.log.warn("Reloading images is only working linux!");
-            return;
-        }  
-
         // remove any stored image information
         sails.models.image.destroy({}).exec(function(err) {
-
-            fs.rmdirSync('');
-
+            
             // reload image information from file system
 
-            // TODO
+            var files = fs.readdirSync(directory);
+            files.forEach(function(file) {
+
+                sails.models.image
+                .create({
+                    name: file,
+                    url: path.join(IMAGE_PATH, file)
+                })
+                .exec(function (err, created) {
+                    sails.log.debug('Created image with name ' + created.name);
+                });
+            });
         });
     }
 };
