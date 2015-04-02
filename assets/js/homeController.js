@@ -2,9 +2,9 @@
 
 angular.module('tlm')
 .controller('homeController', [
-    '$scope', '$state', 'sailsResource', function($scope, $state, sailsResource) {
+    '$scope', '$state', function($scope, $state) {
 
-         $scope.images = sailsResource('image').query();;
+         //$scope.images = sailsResource('image').query();;
 
     }
 ]);
