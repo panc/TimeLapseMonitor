@@ -21,13 +21,8 @@ app.get('/images', function (req, res) {
 
 app.get('/images/:image', function (req, res) {
     var file = path.join(directory, req.params.image);
-    
-    fs.exists(file, function (exists) {
-        if (!exists)
-            return res.notFound(file);
-        
-        return fs.createReadStream(file).pipe(res);
-    });
+
+    res.sendFile(file);
 });
 
 app.get('*', function (req, res) {
@@ -41,4 +36,25 @@ var server = app.listen(3000, function () {
     
     console.log('Example app listening at http://%s:%s', host, port);
 
+});
+
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+// Web Socket Connection
+io.sockets.on('connection', function (socket) {
+    
+    // If we recieved a command from a client to start watering lets do so
+    socket.on('ping', function (data) {
+        console.log("ping");
+        
+        delay = data["duration"];
+        
+        // Set a timer for when we should stop watering
+        setTimeout(function () {
+            socket.emit("pong");
+        }, delay * 1000);
+      
+    });
+  
 });
