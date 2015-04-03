@@ -6,7 +6,6 @@
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-
     <link rel="stylesheet" href="/assets/styles/site.css">
 
 </head>
@@ -16,39 +15,15 @@
         <section role="main" class="main container" ui-view="main"></section>
     </div>
     
-    <button id="hello" type="button">
-        Click me!
-    </button>
-
-    <script src="/vendor/jquery/dist/jquery.js"></script>
     <script src="/vendor/angular/angular.js"></script>
     <script src="/vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="/vendor/angular-fontawesome/dist/angular-fontawesome.js"></script>
-    <script src="/vendor/angular-toastr/dist/angular-toastr.js"></script>
     <script src="/vendor/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="/vendor/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/vendor/angular-socket-io/socket.js"></script>
     
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
     <script src="/assets/js/app.js"></script>
     <script src="/assets/js/homeController.js"></script>
-    
-    <script>
-        //var socket = io.connect('http://localhost:3000');
-        var socket = io();
-
-        socket.on('pong', function (data) {
-            //console.log("pong");
-            alert('Pont');
-        });
-
-        $(document).ready(function () {
-            $("#hello").click(function () {
-                alert('ping');
-                socket.emit('ping', { duration: 2 });
-            });
-        });
-    </script>
-
 </body>
 </html>

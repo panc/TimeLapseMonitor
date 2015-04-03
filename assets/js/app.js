@@ -2,7 +2,8 @@
 
 var tlm = angular.module('tlm', [
     'ui.bootstrap', 
-    'ui.router']);
+    'ui.router',
+    'btford.socket-io']);
 
 // configure the main module
 tlm.config([
@@ -16,7 +17,7 @@ tlm.config([
                 url: '/',
                 views: {
                     'main': {
-                        templateUrl: 'templates/home.html',
+                        templateUrl: 'assets/templates/home.html',
                         controller: 'homeController'
                     }
                 }
@@ -41,4 +42,8 @@ tlm.config([
             };
         }]);
     }
-]);
+])
+
+.factory('socket', function (socketFactory) {
+    return socketFactory();
+});

@@ -31,12 +31,13 @@ app.get('/', function (req, res) {
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-console.log("Connecting via websocket!");
 
-// Web Socket Connection
 io.on('connection', function (socket) {
     
-    // If we recieved a command from a client to start watering lets do so
+    console.log("Connected via websocket!");
+
+    // todo: emit message when photo is take by the camera
+
     socket.on('ping', function (data) {
         console.log("ping");
         

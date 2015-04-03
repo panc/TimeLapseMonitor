@@ -16,11 +16,9 @@
     "dependencies": {
         "angular": "~1.3.11",
         "angular-bootstrap": "~0.12.0",
-        "angular-toastr": "~0.5.2",
         "angular-ui-router": "~0.2.13",
         "angular-fontawesome": "~0.3.0",
-        "bootstrap": "~3.3.1",
-        "socket.io-client": "~1.3.5"
+        "angular-socket-io": "~0.7.0"
     },
     "exportsOverride": {
         "modernizr": { }
