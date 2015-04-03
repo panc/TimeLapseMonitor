@@ -4,17 +4,18 @@ angular.module('tlm')
 .controller('homeController', [
     '$scope', 'socket', function($scope, socket) {
 
+
         socket.on('pong', function (data) {
             //console.log("pong");
             alert('Pont');
         });
 
-        $scope.sendPing = function() {
-            alert('ping');
-            socket.emit('ping', { duration: 2 });
+        $scope.refresh = function() {
+            socket.emit('refresh');
         }
 
-         //$scope.images = sailsResource('image').query();;
-
+        socket.on('new-items', function(items) {
+            $scope.images = items;
+        });
     }
 ]);
