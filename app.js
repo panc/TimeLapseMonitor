@@ -31,17 +31,17 @@ app.get('/', function (req, res) {
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var socket;
+var sockets = [];
 
-io.on('connection', function (s) {
-    socket = s;
+io.on('connection', function (socket) {
+    sockets.push(socket);
 
     console.log("Connected via websocket!");
 
     // todo: emit message when photo is take by the camera
 
     socket.on('refresh', function (data) {
-        refresh();
+        refresh(sockets);
     });
 });
 
@@ -49,12 +49,16 @@ http.listen(3000, function () {
     console.log('listening on *:3000');
 });
 
-var refresh = function () {
-    if (socket === undefined) {
+var refresh = function (socketsToRefresh) {
+    
+    // ensure that we are always working with an array
+    socketsToRefresh = [].concat(socketsToRefresh);
+
+    if (socketsToRefresh.length == 0) {
         console.log("Refresh not needed as no socket is connected");
         return;
     }
-
+    
     console.log("Collecting images for refresh ...");
     
     fs.readdir(imageDirectory, function (err, files) {
@@ -65,7 +69,9 @@ var refresh = function () {
                 url: path.join(IMAGE_PATH, file)
             };
         });
-        
-        socket.emit('new-items', files);
+
+        socketsToRefresh.map(function(socket) {
+            socket.emit('new-items', files);
+        });
     });
 };
