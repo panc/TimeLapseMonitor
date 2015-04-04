@@ -23,9 +23,9 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Compile Include="app.js" />
+    <Compile Include="app\camera.js" />
     <Compile Include="assets\js\app.js" />
     <Compile Include="assets\js\homeController.js" />
-    <Compile Include="Gruntfile.js" />
     <Content Include="assets\robots.txt" />
     <Content Include="assets\favicon.ico" />
     <Content Include="views\403.ejs" />
@@ -40,6 +40,7 @@
     <Folder Include="assets\js" />
     <Folder Include="assets\styles" />
     <Folder Include="assets\templates" />
+    <Folder Include="app\" />
     <Folder Include="views" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
