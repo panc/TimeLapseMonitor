@@ -9,6 +9,8 @@ var imageDirectory = path.join(process.cwd(), IMAGE_PATH);
 var scripDirectory = path.join(process.cwd(), 'bower_components');
 var templatePath = path.join(process.cwd(), 'assets/templates/index.html');
 
+// setup routes
+
 app.use('/assets', express.static('assets'));
 app.use('/camera', express.static('camera'));
 app.use('/vendor', express.static('bower_components'));
@@ -28,6 +30,26 @@ app.get('/images', function (req, res) {
 app.get('/', function (req, res) {
     res.sendFile(templatePath);
 });
+
+
+// setup camera
+var platform = require('os').platform();
+var camera;
+
+if (platform.indexOf("win") == 0) {
+    console.log("Camera not supported on windows!");
+}
+else {
+    var raspicam = require('raspicam');
+    camera = new raspicam({
+        mode: 'photo',
+        output: path.join(imageDirectory, 'test.jpg')
+    });
+    
+    camera.start();
+}
+
+// setup http server and socket connection
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -51,7 +73,7 @@ http.listen(3000, function () {
 
 var refresh = function (socketsToRefresh) {
     
-    // ensure that we are always working with an array
+    // ensure that we are always working with an array, because 'socketsToRefresh' can also be a single socket object
     socketsToRefresh = [].concat(socketsToRefresh);
 
     if (socketsToRefresh.length == 0) {
