@@ -11,7 +11,7 @@ angular.module('tlm')
         });
 
         $scope.refresh = function() {
-            socket.emit('refresh');
+            socket.emit('takePhoto');
         }
 
         socket.on('new-items', function(items) {

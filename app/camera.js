@@ -26,24 +26,33 @@ module.exports = function () {
         var raspicam = require('raspicam');
         camera = new raspicam({
             mode: 'photo',
-            output: path.join(imageDirectory, 'RPI_%04d.jpg')
+            output: 'dummy.jpg', // we have to provide an filename here, but it will be changed later on
+            width: 2592,
+            height: 1944,
+            quality: 100
         });
     }
 
-    camera.on("read", function (err, timestamp, filename) {
-        console.log(err);
-        console.log(timestamp);
-        console.log("Picture taken: " + filename);
+    camera.on("exit", function (err, timestamp, filename) {
         
-        // todo: rename photo
-
         onAfterNewPhoto();
     });
     
     var takePhoto = function () {
         
-        // todo: or should we rename photo here?
-        
+        var format = function(value) {
+            return ("0" + value).slice(-2);
+        }
+
+        var time = new Date();
+        var fileName = time.getFullYear() +
+            format(time.getMonth()) + 
+            format(time.getDate()) + "_" + 
+            format(time.getHours()) + 
+            format(time.getMinutes()) + 
+            format(time.getSeconds());
+
+        camera.set('output', path.join(imageDirectory, fileName));
         camera.start();
     }
     
@@ -71,7 +80,9 @@ module.exports = function () {
 
         takePhoto: takePhoto,
 
-        startTimelapse: function() {
+        startTimelapse: function () {
+
+            console.log('Starting timelapse...');
             setInterval(takePhoto, 10000);
         }
     };

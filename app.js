@@ -1,5 +1,8 @@
+var path = require('path');
 var express = require('express');
 var app = express();
+
+var templatePath = path.join(process.cwd(), 'assets/templates/index.html');
 
 // setup routes
 app.use('/assets', express.static('assets'));
@@ -7,7 +10,7 @@ app.use('/camera', express.static('camera'));
 app.use('/vendor', express.static('bower_components'));
 
 app.get('/', function (req, res) {
-    res.sendFile('./assets/templates/index.html');
+    res.sendFile(templatePath);
 });
 
 // setup camera
