@@ -18,10 +18,10 @@ app.use('/vendor', express.static('bower_components'));
 app.get('/images', function (req, res) {
     var files = fs.readdirSync(imageDirectory)
         .map(function (file) {
-            return {
-                name: file,
-                url: path.join(IMAGE_PATH, file)
-            };
+        return {
+            name: file,
+            url: path.join(IMAGE_PATH, file)
+        };
     });
     
     res.json(files);
@@ -38,16 +38,30 @@ var camera;
 
 if (platform.indexOf("win") == 0) {
     console.log("Camera not supported on windows!");
+    
+    camera = {
+        start: function () { console.log('Camera started (but on windows not supported)'); },
+        stop: function () { },
+        get: function (opt) { },
+        set: function (opt, value) { },
+        on: function (key, callback) { }
+    }
 }
 else {
     var raspicam = require('raspicam');
     camera = new raspicam({
-        mode: 'photo',
-        output: path.join(imageDirectory, 'test.jpg')
+        mode: 'timelapse',
+        output: path.join(imageDirectory, 'RPI_%04d.jpg'),
+        timelapse: 10000
     });
-    
-    camera.start();
 }
+
+camera.on("read", function(err, timestamp, filename) {
+    console.log(err);
+    console.log(timestamp);
+    console.log("Picture taken: " + filename);
+});
+camera.start();
 
 // setup http server and socket connection
 
@@ -57,11 +71,11 @@ var sockets = [];
 
 io.on('connection', function (socket) {
     sockets.push(socket);
-
+    
     console.log("Connected via websocket!");
-
+    
     // todo: emit message when photo is take by the camera
-
+    
     socket.on('refresh', function (data) {
         refresh(sockets);
     });
@@ -75,7 +89,7 @@ var refresh = function (socketsToRefresh) {
     
     // ensure that we are always working with an array, because 'socketsToRefresh' can also be a single socket object
     socketsToRefresh = [].concat(socketsToRefresh);
-
+    
     if (socketsToRefresh.length == 0) {
         console.log("Refresh not needed as no socket is connected");
         return;
@@ -91,8 +105,8 @@ var refresh = function (socketsToRefresh) {
                 url: path.join(IMAGE_PATH, file)
             };
         });
-
-        socketsToRefresh.map(function(socket) {
+        
+        socketsToRefresh.map(function (socket) {
             socket.emit('new-items', files);
         });
     });
