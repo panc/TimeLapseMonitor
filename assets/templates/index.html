@@ -7,21 +7,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="/assets/styles/site.css">
+    <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
 
 </head>
-
 <body>
-    <div ng-app="tlm">
-        <section role="main" class="main container" ui-view="main"></section>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Time Lapse Monitor</a>
+            </div>
+            
+        </div>
     </div>
+    <div class="container body-content">
+        <div ng-app="tlm">
+            <section role="main" class="main container" ui-view="main"></section>
+        </div>
+
+        <hr />
+        <footer>
+            <p>&copy; 2015 - Christoph Pangerl</p>
+        </footer>
+    </div>
+    
+    <script src="/vendor/socket.io-client/socket.io.js"></script>
     
     <script src="/vendor/angular/angular.js"></script>
     <script src="/vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="/vendor/angular-fontawesome/dist/angular-fontawesome.js"></script>
     <script src="/vendor/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="/vendor/angular-socket-io/socket.js"></script>
-    
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
     <script src="/assets/js/app.js"></script>
     <script src="/assets/js/homeController.js"></script>

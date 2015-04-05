@@ -93,7 +93,7 @@ module.exports = function () {
             
             // Taking the photo takes about 5 to 10 seconds.
             // This offset must be included in the interval time!
-            setInterval(takePhoto, 17 * 1000);
+            setInterval(takePhoto, 60 * 1000);
         }
     };
 };
