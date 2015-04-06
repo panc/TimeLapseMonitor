@@ -11,6 +11,12 @@ module.exports = function () {
     var camera;
     var onNewPhotosCallback;
     
+    // todo read settings from fs
+    var settings = {
+        numberOfPhotos: 5,
+        timeLapseInterval: 60 * 1000
+    }
+    
     if (platform.indexOf("win") == 0) {
         console.log("Camera not supported on windows!");
         
@@ -72,11 +78,17 @@ module.exports = function () {
             files = files.map(function (file) {
                 return {
                     name: file,
-                    url: path.join(IMAGE_PATH, file)
+                    url: path.join(IMAGE_PATH, file),
+                    createDate: fs.statSync(path.join(IMAGE_PATH, file)).ctime
                 };
-            });
+            })
+            .sort(function(a, b) {
+                return b.createDate - a.createDate;
+            })
+            .slice(0, settings.numberOfPhotos);
             
-            onNewPhotosCallback(files);
+            if (onNewPhotosCallback)
+                onNewPhotosCallback(files);
         });
     };
     
@@ -95,7 +107,7 @@ module.exports = function () {
             
             // Taking the photo takes about 5 to 10 seconds.
             // This offset must be included in the interval time!
-            setInterval(takePhoto, 60 * 1000);
+            setInterval(takePhoto, settings.timeLapseInterval);
         }
     };
 };
