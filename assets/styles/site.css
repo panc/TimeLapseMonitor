@@ -15,3 +15,20 @@ body {
 .dl-horizontal dt {
     white-space: normal;
 }
+
+.buttons {
+    margin-top: 20px;
+}
+
+.photos {
+    margin-top: 20px;
+}
+
+.photo {
+    float: left;
+}
+
+.photo img {
+    width: 200px;
+    margin: 5px;
+}

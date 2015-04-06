@@ -17,6 +17,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include="assets\styles\site.css" />
+    <Content Include="assets\templates\settings.html" />
     <Content Include="assets\templates\home.html" />
     <Content Include="assets\templates\index.html" />
     <Content Include="bower.json" />
@@ -25,6 +26,7 @@
     <Compile Include="app.js" />
     <Compile Include="app\camera.js" />
     <Compile Include="assets\js\app.js" />
+    <Compile Include="assets\js\settingsController.js" />
     <Compile Include="assets\js\homeController.js" />
     <Content Include="assets\robots.txt" />
     <Content Include="assets\favicon.ico" />

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
 
 </head>
-<body>
+<body ng-app="tlm">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -21,12 +21,18 @@
                 </button>
                 <a class="navbar-brand" href="/">Time Lapse Monitor</a>
             </div>
-            
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a ui-sref="home">Photo Gallery</a></li>
+                    <li><a ui-sref="settings">Settings</a></li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="container body-content">
-        <div ng-app="tlm">
-            <section role="main" class="main container" ui-view="main"></section>
+        <div>
+            <section role="main" class="container" ui-view></section>
         </div>
 
         <hr />
@@ -34,9 +40,9 @@
             <p>&copy; 2015 - Christoph Pangerl</p>
         </footer>
     </div>
-    
+
     <script src="/vendor/socket.io-client/socket.io.js"></script>
-    
+
     <script src="/vendor/angular/angular.js"></script>
     <script src="/vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="/vendor/angular-fontawesome/dist/angular-fontawesome.js"></script>

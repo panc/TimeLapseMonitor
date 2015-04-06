@@ -9,7 +9,7 @@ app.use('/assets', express.static('assets'));
 app.use('/camera', express.static('camera'));
 app.use('/vendor', express.static('bower_components'));
 
-app.get('/', function (req, res) {
+app.get('/*', function (req, res) {
     res.sendFile(templatePath);
 });
 
