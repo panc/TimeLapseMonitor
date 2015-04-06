@@ -29,16 +29,20 @@ io.on('connection', function (socket) {
     socket.on('takePhoto', function () {
         camera.takePhoto();
     });
+
+    socket.on('refresh', function () {
+        camera.refresh();
+    });
 });
 
 http.listen(3000, function () {
     console.log('listening on *:3000');
 });
 
-camera.onNewPhoto(function(files) {
+camera.onNewPhotosAvailable(function(files) {
     
     sockets.map(function (socket) {
-        socket.emit('new-items', files);
+        socket.emit('new-photos', files);
     });
 });
 

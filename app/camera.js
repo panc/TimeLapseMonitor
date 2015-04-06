@@ -9,7 +9,7 @@ module.exports = function () {
     
     var platform = require('os').platform();
     var camera;
-    var onNewPhotoCallback;
+    var onNewPhotosCallback;
     
     if (platform.indexOf("win") == 0) {
         console.log("Camera not supported on windows!");
@@ -42,7 +42,7 @@ module.exports = function () {
     
     camera.on("exit", function (err, timestamp, filename) {
         
-        onAfterNewPhoto();
+        reloadPhotos();
     });
     
     var takePhoto = function () {
@@ -63,7 +63,7 @@ module.exports = function () {
         camera.start();
     }
     
-    var onAfterNewPhoto = function () {
+    var reloadPhotos = function () {
         
         console.log("Collecting images for refresh ...");
         
@@ -76,16 +76,18 @@ module.exports = function () {
                 };
             });
             
-            onNewPhotoCallback(files);
+            onNewPhotosCallback(files);
         });
     };
     
     return {
-        onNewPhoto: function (newPhotoCallback) {
-            onNewPhotoCallback = newPhotoCallback;
+        onNewPhotosAvailable: function (newPhotosCallback) {
+            onNewPhotosCallback = newPhotosCallback;
         },
         
         takePhoto: takePhoto,
+        
+        refresh: reloadPhotos,
         
         startTimelapse: function () {
             

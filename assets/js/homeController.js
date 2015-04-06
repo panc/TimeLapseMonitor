@@ -11,11 +11,17 @@ angular.module('tlm')
         });
 
         $scope.refresh = function() {
+            socket.emit('refresh');
+        }
+        
+        $scope.takePhoto = function () {
             socket.emit('takePhoto');
         }
 
-        socket.on('new-items', function(items) {
-            $scope.images = items;
+        socket.on('new-photos', function(photos) {
+            $scope.photos = photos;
         });
+
+        $scope.refresh();
     }
 ]);

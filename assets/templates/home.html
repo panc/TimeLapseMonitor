@@ -1,14 +1,19 @@
 <div class="home-content">
-    <h1>Hello World!</h1>
+    <h1>Photo Gallery</h1>
     
+    <div class="row">
+        <button id="refresh" type="button" ng-click="refresh()">
+            Refresh!
+        </button>
+        <button id="takePhoto" type="button" ng-click="takePhoto()">
+            Take Photo
+        </button>
+    </div>
+
     <ul>
-        <li ng-repeat="img in images">
+        <li ng-repeat="img in photos">
             {{img.name}} <br>
             <img ng-src="{{ img.url }}" width="200px" />
         </li>
     </ul>
-    
-    <button id="refresh" type="button" ng-click="refresh()">
-        Refresh!
-    </button>
 </div>
