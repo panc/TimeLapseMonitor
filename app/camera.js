@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var INTERVAL = 60000;
 var IMAGE_PATH = 'camera';
-var imageDirectory = path.join(process.cwd(), IMAGE_PATH);
+var imageDirectory = __dirname + '/' + IMAGE_PATH;
 
 module.exports = function () {
     
