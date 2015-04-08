@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 
-var templatePath = __dirname + '/assets/templates/index.html');
+var templatePath = __dirname + '/assets/templates/index.html';
 
 // setup routes
 app.use('/assets', express.static('assets'));
