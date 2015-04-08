@@ -4,9 +4,9 @@ var app = express();
 var templatePath = __dirname + '/assets/templates/index.html';
 
 // setup routes
-app.use('/assets', express.static('assets'));
-app.use('/camera', express.static('camera'));
-app.use('/vendor', express.static('bower_components'));
+app.use('/assets', express.static(__dirname + '/assets'));
+app.use('/camera', express.static(__dirname + '/camera'));
+app.use('/vendor', express.static(__dirname + '/bower_components'));
 
 app.get('/*', function (req, res) {
     res.sendFile(templatePath);
