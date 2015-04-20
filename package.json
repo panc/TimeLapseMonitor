@@ -6,6 +6,7 @@
     "keywords": [ ],
     "dependencies": {
         "express": "^4.12.3",
+        "lwip": "0.0.6",
         "raspicam": "^0.2.13",
         "socket.io": "^1.3.5"
     },

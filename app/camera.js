@@ -14,7 +14,7 @@ module.exports = function () {
     // todo read settings from fs
     var settings = {
         numberOfPhotos: 5,
-        timeLapseInterval: 60 * 1000
+        timeLapseInterval: 60 * 1000, // ensure that the value is not smaller than 60 seconds
     }
     
     if (platform.indexOf("win") == 0) {
@@ -47,26 +47,53 @@ module.exports = function () {
     }
     
     camera.on("exit", function (err, timestamp, filename) {
-        
-        reloadPhotos();
+
+        var ip = path.join(imageDirectory, "20150314_211848.jpg");
+        var newip = path.join(imageDirectory, "small_20150314_211848.jpg");
+
+        var lwip = require('lwip');
+        lwip.open(ip, function (err, image) {
+
+            var scaleFactor = 200 / image.width();
+
+            image.batch()
+                .scale(scaleFactor)// scale to a width of 200px
+                .writeFile(newip, function (err) {
+                    // todo: check err...
+                  
+                    reloadPhotos();
+                });
+
+        });
     });
     
     var takePhoto = function () {
         
         var format = function (value) {
-            return ("0" + value).slice(-2);
+            return ("00" + value).slice(-3);
         }
         
-        var time = new Date();
-        var fileName = time.getFullYear() +
-            format(time.getMonth()) + 
-            format(time.getDate()) + "_" + 
-            format(time.getHours()) + 
-            format(time.getMinutes()) + 
-            format(time.getSeconds());
+        fs.readdir(imageDirectory, function (err, files) {
+            
+            // We do not use the time stamp of the file
+            // because when running on a raspberry there might
+            // be no correctly configured date/time available.
+
+            /*
+            var time = new Date();
+            var fileName = time.getFullYear() +
+                format(time.getMonth()) + 
+                format(time.getDate()) + "_" + 
+                format(time.getHours()) + 
+                format(time.getMinutes()) + 
+                format(time.getSeconds());
+            */
         
-        camera.set('output', path.join(imageDirectory, fileName));
-        camera.start();
+            var fileName = "Photo_" + format(files.length);
+        
+            camera.set('output', path.join(imageDirectory, fileName));
+            camera.start(); 
+        });
     }
     
     var reloadPhotos = function () {
@@ -78,12 +105,17 @@ module.exports = function () {
             files = files.map(function (file) {
                 return {
                     name: file,
-                    url: path.join(IMAGE_PATH, file),
-                    createDate: fs.statSync(path.join(IMAGE_PATH, file)).ctime
+                    url: path.join(IMAGE_PATH, file)
                 };
             })
             .sort(function(a, b) {
-                return b.createDate - a.createDate;
+                if (b.name > a.name)
+                    return -1;
+                if (b.name < a.name)
+                    return 1;
+                    
+                return 0;
+                       
             })
             .slice(0, settings.numberOfPhotos);
             
@@ -105,8 +137,6 @@ module.exports = function () {
             
             console.log('Starting timelapse...');
             
-            // Taking the photo takes about 5 to 10 seconds.
-            // This offset must be included in the interval time!
             setInterval(takePhoto, settings.timeLapseInterval);
         }
     };
