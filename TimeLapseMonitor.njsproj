@@ -24,7 +24,7 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Compile Include="app.js" />
-    <Compile Include="app\camera.js" />
+    <Compile Include="app\timelapseController.js" />
     <Compile Include="assets\js\app.js" />
     <Compile Include="assets\js\settingsController.js" />
     <Compile Include="assets\js\homeController.js" />

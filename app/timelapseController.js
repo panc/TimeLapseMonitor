@@ -48,7 +48,7 @@ module.exports = function () {
     
     camera.on("exit", function (err, timestamp, filename) {
 
-        var ip = path.join(imageDirectory, "20150314_211848.jpg");
+        var img = path.join(imageDirectory, "20150314_211848.jpg");
         var newip = path.join(imageDirectory, "small_20150314_211848.jpg");
 
         var lwip = require('lwip');
@@ -68,10 +68,10 @@ module.exports = function () {
     });
     
     var takePhoto = function () {
-        
-        var format = function (value) {
+
+        var format = function(value) {
             return ("00" + value).slice(-3);
-        }
+        };
         
         fs.readdir(imageDirectory, function (err, files) {
             
@@ -131,7 +131,7 @@ module.exports = function () {
         
         takePhoto: takePhoto,
         
-        refresh: reloadPhotos,
+        triggerRefresh: reloadPhotos,
         
         startTimelapse: function () {
             

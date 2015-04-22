@@ -13,7 +13,7 @@ app.get('/*', function (req, res) {
 });
 
 // setup camera
-var camera = require('./app/camera.js')();
+var controller = require('./app/timelapseController.js')();
 
 // setup http server and socket connection
 var http = require('http').Server(app);
@@ -26,11 +26,11 @@ io.on('connection', function (socket) {
     console.log("Connected via websocket!");
 
     socket.on('takePhoto', function () {
-        camera.takePhoto();
+        controller.takePhoto();
     });
 
     socket.on('refresh', function () {
-        camera.refresh();
+        controller.triggerRefresh();
     });
 });
 
@@ -38,11 +38,11 @@ http.listen(3000, function () {
     console.log('listening on *:3000');
 });
 
-camera.onNewPhotosAvailable(function(files) {
+controller.onNewPhotosAvailable(function(files) {
     
     sockets.map(function (socket) {
         socket.emit('new-photos', files);
     });
 });
 
-camera.startTimelapse();
+controller.startTimelapse();
