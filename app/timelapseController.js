@@ -9,10 +9,9 @@ var PHOTOS_DIR = __dirname + '/../' + PHOTOS_FOLDER_NAME;
 var THUMBNAILS_FOLDER_NAME = 'thumbnails';
 var THUMBNAILS_DIR = __dirname + '/../' + THUMBNAILS_FOLDER_NAME;
 
-module.exports = function () {
+module.exports = function (settings) {
     
     var camera = require('./cameraHelper').createCamera();
-    var settings = require('./settings')();
 
     var onNewPhotosCallback;
     
@@ -66,8 +65,6 @@ module.exports = function () {
     var takePhoto = function () {
 
         var fileName = fsHelper.formatFileName("Photo_", files.length);
-        
-        console.log("foramt file value: ", files.length);
         console.log("take photo " + fileName); 
 
         files[files.length] = fsHelper.mapFile(fileName, PHOTOS_FOLDER_NAME);

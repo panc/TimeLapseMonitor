@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var settings = require('./app/settings')();
 
 var templatePath = __dirname + '/assets/templates/index.html';
 
@@ -14,7 +15,7 @@ app.get('/*', function (req, res) {
 });
 
 // setup camera
-var controller = require('./app/timelapseController.js')();
+var controller = require('./app/timelapseController.js')(settings);
 
 // setup http server and socket connection
 var http = require('http').Server(app);

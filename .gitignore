@@ -45,6 +45,7 @@ _ReSharper*/
 camera/
 thumbnails/
 obj/
+settings.json
 
 *.suo
 *.user

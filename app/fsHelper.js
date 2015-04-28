@@ -17,7 +17,6 @@ module.exports = function () {
 
             var files = fs.readdirSync(dir)
                 .map(function (file) {
-                    console.log("File: " + file);
                     return mapFile(file, folderName);
                 })
                 .sort(function(a, b) {
@@ -32,7 +31,7 @@ module.exports = function () {
         },
 
         formatFileName: function (prefix, value) {
-            return prefix + ("000" + value).slice(-3) + ".jpg";
+            return prefix + ("0000" + value).slice(-4) + ".jpg";
         }
     };
 };
