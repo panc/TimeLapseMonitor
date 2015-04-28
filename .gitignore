@@ -43,6 +43,7 @@ _ReSharper*/
 
 # Project Specific
 camera/
+thumbnails/
 obj/
 
 *.suo
