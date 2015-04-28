@@ -34,6 +34,12 @@ io.on('connection', function (socket) {
     socket.on('refresh', function () {
         controller.triggerRefresh();
     });
+
+    socket.on('updateSettings', function(data) {
+        settings.update(data);
+
+        // todo: restart timelapse with new interval...
+    });
 });
 
 http.listen(3000, function () {

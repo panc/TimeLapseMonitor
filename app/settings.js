@@ -6,17 +6,17 @@ module.exports = function () {
     
     var settings = {
         numberOfPhotos: 5,
-        timeLapseInterval: 60 * 1000 * 10, // ensure that the value is not smaller than 60 seconds
+        timeLapseInterval: 60 * 1000 * 10,
     }
     
-    var writeSettingsToFile = function() {
-        fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings));
+    var writeSettingsToFile = function(data) {
+        fs.writeFileSync(SETTINGS_FILE, JSON.stringify(data));
     }
     
     if (!fs.existsSync(SETTINGS_FILE)) {
         // store default settings
         console.info("No settings.json found. Use default settings ...");
-        writeSettingsToFile();
+        writeSettingsToFile(settings);
     }
     else {
         // read settings from file
@@ -29,7 +29,16 @@ module.exports = function () {
         console.info("\t-", s, ": \t", settings[s]);
     }
 
-    settings.save = writeSettingsToFile;
+    settings.update = function(data) {
+
+        if (data.numberOfPhotos && data.numberOfPhotos > 0 && data.numberOfPhotos < 50)
+            settings.numberOfPhotos = data.numberOfPhotos;
+
+        if (data.timeLapseInterval && data.timeLapseInterval > 60000) // ensure that the value is not smaller than 60 seconds
+            settings.timeLapseInterval = data.timeLapseInterval;
+
+        writeSettingsToFile(settings);
+    };
 
     return settings;
 };
