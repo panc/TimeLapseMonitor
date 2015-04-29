@@ -3,15 +3,18 @@
 angular.module('tlm')
 .controller('settingsController', [
     '$scope', 'socket', function($scope, socket) {
+        
+        $scope.settings = { };
 
-        $scope.save = function() {
-            socket.emit('update-settings', { /* data */});
+        $scope.save = function () {
+            console.log("settings: ", $scope.settings.numberOfPhotos);
+            socket.emit('update-settings', $scope.settings);
         }
         
-        socket.on('new-settings', function(photos) {
-            $scope.photos = photos;
+        socket.on('new-settings', function(settings) {
+            $scope.settings = settings;
         });
         
-        socket.emit('load-settings');
+        socket.emit('request-settings');
     }
 ]);

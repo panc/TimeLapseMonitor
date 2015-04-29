@@ -24,20 +24,39 @@ module.exports = function () {
         settings = JSON.parse(content);
     }
     
-    console.info("Loaded settings:");
-    for(var s in settings) {
-        console.info("\t-", s, ": \t", settings[s]);
+    var log = function(s) {
+        console.info("\t numberOfPhotos:\t", s.numberOfPhotos);
+        console.info("\t timeLapseInterval:\t", s.timeLapseInterval);
     }
+    
+    console.info("Loaded settings:");
+    log(settings);
 
     settings.update = function(data) {
 
-        if (data.numberOfPhotos && data.numberOfPhotos > 0 && data.numberOfPhotos < 50)
-            settings.numberOfPhotos = data.numberOfPhotos;
+        var hasChanged = false;
 
-        if (data.timeLapseInterval && data.timeLapseInterval > 60000) // ensure that the value is not smaller than 60 seconds
-            settings.timeLapseInterval = data.timeLapseInterval;
+        if (data.numberOfPhotos && data.numberOfPhotos > 0 && data.numberOfPhotos < 50 && data.numberOfPhotos != this.numberOfPhotos) {
+            hasChanged = true;
+            this.numberOfPhotos = data.numberOfPhotos;
+        }
 
-        writeSettingsToFile(settings);
+        if (data.timeLapseInterval && data.timeLapseInterval > 60000 && data.timeLapseInterval != this.timeLapseInterval)
+        {
+            // ensure that the value is not smaller than 60 seconds
+            hasChanged = true;
+            this.timeLapseInterval = data.timeLapseInterval;
+        }
+        
+        if (hasChanged) {
+            writeSettingsToFile(this);
+
+            console.info("Successfully stored new settings:");
+            log(this);
+        }
+        else {
+            console.info("Nothing to update...");
+        }
     };
 
     return settings;

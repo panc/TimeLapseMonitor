@@ -27,23 +27,37 @@ io.on('connection', function (socket) {
     
     console.log("Connected via websocket!");
 
-    socket.on('takePhoto', function () {
+    socket.on('take-photo', function () {
         controller.takePhoto();
     });
 
-    socket.on('refresh', function () {
+    socket.on('refresh-photos', function () {
         controller.triggerRefresh();
     });
 
-    socket.on('updateSettings', function(data) {
+    socket.on('request-settings', function() {
+        socket.emit('new-settings', settings);
+    });
+
+    socket.on('update-settings', function (data) {
         settings.update(data);
 
         // todo: restart timelapse with new interval...
     });
+
+    socket.on('disconnect', function () {
+        console.log("Socket disconnected...");
+        
+        var index = sockets.indexOf(socket);
+
+        if (index > -1) {
+            sockets.splice(index, 1);
+        }
+    });
 });
 
 http.listen(3000, function () {
-    console.log('listening on *:3000');
+    console.log('Server is no listening on *:3000');
 });
 
 controller.onNewPhotosAvailable(function(files) {

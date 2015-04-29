@@ -2,11 +2,17 @@
     <h1>Settings</h1>
     
     <div class="row">
-        <input type="text" placeholder="timeout"/>
+        <label class="col-sm-3">Time interval between photos:</label>
+        <input class="col-sm-8" type="text" placeholder="interval" ng-model="settings.timeLapseInterval" />
     </div>
     
     <div class="row">
-        <button id="refresh" type="button" ng-click="save()">
+        <label class="col-sm-3">Number of photos to show:</label>
+        <input class="col-sm-8" type="text" placeholder="interval" ng-model="settings.numberOfPhotos" />
+    </div>
+    
+    <div class="row">
+        <button class="col-sm-1" type="button" ng-click="save()">
             Save
         </button>
     </div>

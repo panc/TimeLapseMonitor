@@ -5,11 +5,11 @@ angular.module('tlm')
     '$scope', 'socket', function($scope, socket) {
 
         $scope.refresh = function() {
-            socket.emit('refresh');
+            socket.emit('refresh-photos');
         }
         
         $scope.takePhoto = function () {
-            socket.emit('takePhoto');
+            socket.emit('take-photo');
         }
 
         socket.on('new-photos', function(photos) {

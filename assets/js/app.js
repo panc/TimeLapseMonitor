@@ -13,13 +13,11 @@ tlm.config([
         $stateProvider
             // routes for home module
         .state('settings', {
-            title: 'Settings',
             url: '/settings',
             templateUrl: 'assets/templates/settings.html',
             controller: 'settingsController'
         })
         .state('home', {
-            title: 'home',
             url: '/',
             templateUrl: 'assets/templates/home.html',
             controller: 'homeController'
