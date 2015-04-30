@@ -41,7 +41,7 @@ module.exports = function () {
             this.numberOfPhotos = data.numberOfPhotos;
         }
 
-        if (data.timeLapseInterval && data.timeLapseInterval > 60000 && data.timeLapseInterval != this.timeLapseInterval)
+        if (data.timeLapseInterval && data.timeLapseInterval >= 60000 && data.timeLapseInterval != this.timeLapseInterval)
         {
             // ensure that the value is not smaller than 60 seconds
             hasChanged = true;

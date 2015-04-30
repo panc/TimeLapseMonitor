@@ -7,12 +7,19 @@ angular.module('tlm')
         $scope.settings = { };
 
         $scope.save = function () {
-            console.log("settings: ", $scope.settings.numberOfPhotos);
-            socket.emit('update-settings', $scope.settings);
+            var settings = {
+                numberOfPhotos: $scope.settings.numberOfPhotos,
+                timeLapseInterval: $scope.settings.timeLapseInterval * 1000
+            }
+
+            socket.emit('update-settings', settings);
         }
         
         socket.on('new-settings', function(settings) {
-            $scope.settings = settings;
+            $scope.settings = {
+                numberOfPhotos: settings.numberOfPhotos,
+                timeLapseInterval: settings.timeLapseInterval / 1000
+            };
         });
         
         socket.emit('request-settings');

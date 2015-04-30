@@ -32,3 +32,8 @@ body {
     width: 200px;
     margin: 5px;
 }
+
+.form-control {
+    max-width: 200px;
+    margin-bottom: 20px;
+}

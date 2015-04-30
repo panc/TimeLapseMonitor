@@ -42,6 +42,8 @@ io.on('connection', function (socket) {
     socket.on('update-settings', function (data) {
         settings.update(data);
 
+        socket.emit('new-settings', settings);
+
         // todo: restart timelapse with new interval...
     });
 
@@ -50,9 +52,8 @@ io.on('connection', function (socket) {
         
         var index = sockets.indexOf(socket);
 
-        if (index > -1) {
+        if (index > -1) 
             sockets.splice(index, 1);
-        }
     });
 });
 

@@ -2,13 +2,13 @@
     <h1>Settings</h1>
     
     <div class="row">
-        <label class="col-sm-3">Time interval between photos:</label>
-        <input class="col-sm-8" type="text" placeholder="interval" ng-model="settings.timeLapseInterval" />
+        <span>Time interval between photos in [s] (min. 60):</span>
+        <input class="form-control" type="text" placeholder="interval" ng-model="settings.timeLapseInterval" />
     </div>
     
     <div class="row">
-        <label class="col-sm-3">Number of photos to show:</label>
-        <input class="col-sm-8" type="text" placeholder="interval" ng-model="settings.numberOfPhotos" />
+        <span>Number of photos to show (max. 50):</span>
+        <input class="form-control" type="text" placeholder="interval" ng-model="settings.numberOfPhotos" />
     </div>
     
     <div class="row">
