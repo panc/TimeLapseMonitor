@@ -57,7 +57,7 @@ io.on('connection', function (socket) {
 });
 
 http.listen(3000, function () {
-    console.log('Server is no listening on *:3000');
+    console.log('Server is now listening on *:3000');
 });
 
 controller.onNewPhotosAvailable(function(files) {
