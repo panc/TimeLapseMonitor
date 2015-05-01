@@ -6,10 +6,16 @@ angular.module('tlm')
 
         $scope.refresh = function() {
             socket.emit('refresh-photos');
+
+            // todo:
+            // disable button
         }
         
         $scope.takePhoto = function () {
             socket.emit('take-photo');
+
+            // todo:
+            // disable button
         }
 
         socket.on('new-photos', function(photos) {

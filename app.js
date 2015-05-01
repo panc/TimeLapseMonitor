@@ -20,52 +20,56 @@ var controller = require('./app/timelapseController.js')(settings);
 // setup http server and socket connection
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var sockets = [];
 
 io.on('connection', function (socket) {
-    sockets.push(socket);
-    
-    console.log("Connected via websocket!");
+    console.log("Socket ", socket.id, " connected via websocket!");
 
     socket.on('take-photo', function () {
         controller.takePhoto();
+    });
+    
+    socket.on('start-timelapse', function () {
+        controller.startTimelapse();
+        log('Timelapse started!');
+    });
+    
+    socket.on('stop-timelapse', function () {
+        controller.stopTimelapse();
+        log('Timelapse stopped!');
     });
 
     socket.on('refresh-photos', function () {
         controller.triggerRefresh();
     });
 
-    socket.on('request-settings', function() {
-        socket.emit('new-settings', settings);
+    socket.on('request-settings', function(callback) {
+        callback(settings);
     });
 
     socket.on('update-settings', function (data) {
         settings.update(data);
+        controller.restartTimelapse();
 
-        socket.emit('new-settings', settings);
-
-        // todo: restart timelapse with new interval...
+        io.emit('settings-updated', settings);
+        log('Settings updateded.');
     });
 
     socket.on('disconnect', function () {
-        console.log("Socket disconnected...");
-        
-        var index = sockets.indexOf(socket);
-
-        if (index > -1) 
-            sockets.splice(index, 1);
+        console.log("Socket ", socket.id, " disconnected...");
     });
+});
+
+var log = function(message) {
+    io.emit('log-message', message);
+}
+
+controller.onNewPhotosAvailable(function(files) {
+    // broadcast to all connected sockets
+    io.emit('new-photos', files);
 });
 
 http.listen(3000, function () {
     console.log('Server is now listening on *:3000');
-});
-
-controller.onNewPhotosAvailable(function(files) {
-    
-    sockets.map(function (socket) {
-        socket.emit('new-photos', files);
-    });
 });
 
 controller.startTimelapse();

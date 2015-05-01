@@ -15,13 +15,19 @@ angular.module('tlm')
             socket.emit('update-settings', settings);
         }
         
-        socket.on('new-settings', function(settings) {
+        socket.on('settings-updated', function(settings) {
+            mapSettings(settings);
+        });
+        
+        socket.emit('request-settings', function(settings) {
+            mapSettings(settings);
+        });
+
+        var mapSettings = function(settings) {
             $scope.settings = {
                 numberOfPhotos: settings.numberOfPhotos,
                 timeLapseInterval: settings.timeLapseInterval / 1000
             };
-        });
-        
-        socket.emit('request-settings');
+        }
     }
 ]);

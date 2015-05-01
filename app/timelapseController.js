@@ -89,10 +89,16 @@ module.exports = function (settings) {
         triggerRefresh: reloadPhotos,
         
         startTimelapse: function () {
-            
             console.log('Starting timelapse...');
-            
             setInterval(takePhoto, settings.timeLapseInterval);
+        },
+
+        stopTimelapse: function () {
+            console.log('TODO: Stop timelapse...');
+        },
+
+        restartTimelapse: function () {
+            console.log('TODO: restart timelapse...');
         }
     };
 };
