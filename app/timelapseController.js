@@ -14,6 +14,7 @@ module.exports = function (settings) {
     var camera = require('./cameraHelper').createCamera();
 
     var onNewPhotosCallback;
+    var onErrorCallback;
     
     // init file cache
     var files = fsHelper.mapFiles(PHOTOS_DIR, PHOTOS_FOLDER_NAME);
@@ -44,6 +45,12 @@ module.exports = function (settings) {
         var thumbPath = path.join(THUMBNAILS_DIR, thumbnailName);
 
         lwip.open(photoPath, function(err, image) {
+            
+            // todo: check err...
+            if (err) {
+                console.log("Failed to open image! ", e);
+                return;
+            }
 
             var scaleFactor = 200 / image.width();
 
@@ -82,6 +89,10 @@ module.exports = function (settings) {
     return {
         onNewPhotosAvailable: function (newPhotosCallback) {
             onNewPhotosCallback = newPhotosCallback;
+        },
+        
+        onError: function(errorCallback) {
+            onErrorCallback = errorCallback;
         },
         
         takePhoto: takePhoto,

@@ -42,6 +42,10 @@
         </div>
     </div>
     <div class="container body-content">
+        <div ng-controller="alertController">
+            <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+        </div>
+        
         <div>
             <section role="main" class="container" ui-view></section>
         </div>
@@ -63,5 +67,6 @@
     <script src="/assets/js/app.js"></script>
     <script src="/assets/js/homeController.js"></script>
     <script src="/assets/js/settingsController.js"></script>
+    <script src="/assets/js/alertController.js"></script>
 </body>
 </html>
