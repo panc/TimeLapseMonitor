@@ -14,12 +14,12 @@ app.get('/*', function (req, res) {
     res.sendFile(templatePath);
 });
 
-// setup camera
-var controller = require('./app/timelapseController.js')(settings);
-
 // setup http server and socket connection
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
+var log = require('./app/log')(io);
+var controller = require('./app/timelapseController.js')(settings, log);
 
 io.on('connection', function (socket) {
     console.log("Socket ", socket.id, " connected via websocket!");
@@ -30,12 +30,12 @@ io.on('connection', function (socket) {
     
     socket.on('start-timelapse', function () {
         controller.startTimelapse();
-        log('Timelapse started!');
+        log.info('Timelapse started!');
     });
     
     socket.on('stop-timelapse', function () {
         controller.stopTimelapse();
-        log('Timelapse stopped!');
+        log.info('Timelapse stopped!');
     });
 
     socket.on('refresh-photos', function () {
@@ -51,17 +51,13 @@ io.on('connection', function (socket) {
         controller.restartTimelapse();
 
         io.emit('settings-updated', settings);
-        log('Settings updateded.');
+        log.info('Settings updateded.');
     });
 
     socket.on('disconnect', function () {
         console.log("Socket ", socket.id, " disconnected...");
     });
 });
-
-var log = function(message) {
-    io.emit('log-message', message);
-}
 
 controller.onNewPhotosAvailable(function(files) {
     // broadcast to all connected sockets

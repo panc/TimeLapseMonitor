@@ -6,10 +6,10 @@ angular.module('tlm')
         
         $scope.alerts = [];
 
-        socket.on('log-message', function(message) {
+        socket.on('log-message', function(msg) {
             var alert = {
-                type: 'success', 
-                msg: message
+                type: msg.type, 
+                msg: msg.message
             };
 
             $scope.alerts.push(alert);

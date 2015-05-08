@@ -9,12 +9,13 @@ var PHOTOS_DIR = __dirname + '/../' + PHOTOS_FOLDER_NAME;
 var THUMBNAILS_FOLDER_NAME = 'thumbnails';
 var THUMBNAILS_DIR = __dirname + '/../' + THUMBNAILS_FOLDER_NAME;
 
-module.exports = function (settings) {
+module.exports = function (settings, log) {
     
     var camera = require('./cameraHelper').createCamera();
 
     var onNewPhotosCallback;
     var onErrorCallback;
+    var intervalHandle;
     
     // init file cache
     var files = fsHelper.mapFiles(PHOTOS_DIR, PHOTOS_FOLDER_NAME);
@@ -46,9 +47,9 @@ module.exports = function (settings) {
 
         lwip.open(photoPath, function(err, image) {
             
-            // todo: check err...
             if (err) {
-                console.log("Failed to open image! ", e);
+                console.log("Failed to open image! ", err);
+                log.error('Failed to open image "' + photoPath + '"!');
                 return;
             }
 
@@ -57,13 +58,15 @@ module.exports = function (settings) {
             image.batch()
                 .scale(scaleFactor) // scale to a width of 200px
                 .writeFile(thumbPath, function(e) {
-                    // todo: check err...
                     if (e) {
                         console.log("Failed to create thumbnail! ", e);
+                        log.error('Failed to create thumbnail for "' + photoPath + '"!');
                         return;
                     }
 
                     console.log("Thumbnail successfully created!");
+                    log.info('Photo "' + photo.name + '" successfully saved.');
+
                     reloadPhotos();
                 });
         });
@@ -101,15 +104,21 @@ module.exports = function (settings) {
         
         startTimelapse: function () {
             console.log('Starting timelapse...');
-            setInterval(takePhoto, settings.timeLapseInterval);
+            
+            intervalHandle = setInterval(takePhoto, settings.timeLapseInterval);
         },
 
         stopTimelapse: function () {
             console.log('TODO: Stop timelapse...');
+
+            clearInterval(intervalHandle);
         },
 
         restartTimelapse: function () {
             console.log('TODO: restart timelapse...');
+
+            clearInterval(intervalHandle);
+            intervalHandle = setInterval(takePhoto, settings.timeLapseInterval);
         }
     };
 };
