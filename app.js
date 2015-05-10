@@ -37,6 +37,10 @@ io.on('connection', function (socket) {
         controller.stopTimelapse();
         log.info('Timelapse stopped!');
     });
+    
+    socket.on('request-timelapse-state', function (callback) {
+        callback(controller.isTimelapseRunning());
+    });
 
     socket.on('refresh-photos', function () {
         controller.triggerRefresh();
@@ -62,6 +66,10 @@ io.on('connection', function (socket) {
 controller.onNewPhotosAvailable(function(files) {
     // broadcast to all connected sockets
     io.emit('new-photos', files);
+});
+
+controller.onStateChanged(function() {
+    io.emit('timelapse-state-changed', controller.isTimelapseRunning());
 });
 
 http.listen(3000, function () {

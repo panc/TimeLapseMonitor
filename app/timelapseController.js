@@ -14,7 +14,7 @@ module.exports = function (settings, log) {
     var camera = require('./cameraHelper').createCamera();
 
     var onNewPhotosCallback;
-    var onErrorCallback;
+    var onStateChangedCallback;
     var intervalHandle;
     
     // init file cache
@@ -94,10 +94,10 @@ module.exports = function (settings, log) {
             onNewPhotosCallback = newPhotosCallback;
         },
         
-        onError: function(errorCallback) {
-            onErrorCallback = errorCallback;
+        onStateChanged: function(stateChangedCallback) {
+            onStateChangedCallback = stateChangedCallback;
         },
-        
+
         takePhoto: takePhoto,
         
         triggerRefresh: reloadPhotos,
@@ -119,6 +119,10 @@ module.exports = function (settings, log) {
 
             clearInterval(intervalHandle);
             intervalHandle = setInterval(takePhoto, settings.timeLapseInterval);
+        },
+
+        isTimelapseRunning: function() {
+            return intervalHandle != undefined;
         }
     };
 };

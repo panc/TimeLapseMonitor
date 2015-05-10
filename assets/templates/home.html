@@ -9,6 +9,13 @@
             Take Photo
         </button>
     </div>
+    
+    <div class="row buttons">
+        <button type="button" ng-click="startOrStopTimeplase()">
+            {{ startStopButtonText }}
+        </button>
+        <span>{{ timelapseState }}</span>
+    </div>
 
     <div class="row photos">
         <div ng-repeat="img in photos" class="photo">
