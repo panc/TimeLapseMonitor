@@ -89,6 +89,10 @@ module.exports = function (settings, log) {
             onNewPhotosCallback(thumbnails.slice(0, settings.numberOfPhotos));
     };
     
+    var getTimelapseState = function() {
+        return { state: intervalHandle != undefined };
+    }
+    
     return {
         onNewPhotosAvailable: function (newPhotosCallback) {
             onNewPhotosCallback = newPhotosCallback;
@@ -106,23 +110,21 @@ module.exports = function (settings, log) {
             console.log('Starting timelapse...');
             
             intervalHandle = setInterval(takePhoto, settings.timeLapseInterval);
+
+            if (onStateChangedCallback)
+                onStateChangedCallback(getTimelapseState());
         },
 
         stopTimelapse: function () {
-            console.log('TODO: Stop timelapse...');
+            console.log('Stopping timelapse...');
 
             clearInterval(intervalHandle);
+            intervalHandle = undefined;
+
+            if (onStateChangedCallback)
+                onStateChangedCallback(getTimelapseState());
         },
 
-        restartTimelapse: function () {
-            console.log('TODO: restart timelapse...');
-
-            clearInterval(intervalHandle);
-            intervalHandle = setInterval(takePhoto, settings.timeLapseInterval);
-        },
-
-        isTimelapseRunning: function() {
-            return intervalHandle != undefined;
-        }
+        getTimelapseState: getTimelapseState
     };
 };

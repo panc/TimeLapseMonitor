@@ -39,7 +39,7 @@ io.on('connection', function (socket) {
     });
     
     socket.on('request-timelapse-state', function (callback) {
-        callback(controller.isTimelapseRunning());
+        callback(controller.getTimelapseState());
     });
 
     socket.on('refresh-photos', function () {
@@ -52,7 +52,11 @@ io.on('connection', function (socket) {
 
     socket.on('update-settings', function (data) {
         settings.update(data);
-        controller.restartTimelapse();
+        
+        console.log('Restart timelapse...');
+
+        controller.stopTimelapse();
+        controller.startTimelapse();
 
         io.emit('settings-updated', settings);
         log.info('Settings updateded.');
@@ -68,8 +72,8 @@ controller.onNewPhotosAvailable(function(files) {
     io.emit('new-photos', files);
 });
 
-controller.onStateChanged(function() {
-    io.emit('timelapse-state-changed', controller.isTimelapseRunning());
+controller.onStateChanged(function(state) {
+    io.emit('timelapse-state-changed', state);
 });
 
 http.listen(3000, function () {

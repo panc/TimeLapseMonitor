@@ -19,7 +19,7 @@ angular.module('tlm')
         }
         
         $scope.startOrStopTimeplase = function () {
-            var method = $scope.isTimelapseRunning ? 'start-timelapse' : 'stop-timelapse';
+            var method = $scope.isTimelapseRunning ? 'stop-timelapse' : 'start-timelapse';
             socket.emit(method);
 
             // todo:
@@ -38,10 +38,10 @@ angular.module('tlm')
             mapTimelapseState(isTimelapseRunning);
         });
 
-        var mapTimelapseState = function(isTimelapseRunning) {
-            $scope.isTimelapseRunning = isTimelapseRunning;
-            $scope.timelapseState = isTimelapseRunning ? "Running" : "Stopped";
-            $scope.startStopButtonText = isTimelapseRunning ? "Stop Timelapse" : "Start Timelapse";
+        var mapTimelapseState = function(result) {
+            $scope.isTimelapseRunning = result.state;
+            $scope.timelapseState = result.state ? "Running" : "Stopped";
+            $scope.startStopButtonText = result.state ? "Stop Timelapse" : "Start Timelapse";
         };
 
         $scope.refresh();
