@@ -1,27 +1,21 @@
 <div>
     <h1>Photo Gallery</h1>
     
-    <div class="row buttons">
-        <button type="button" ng-click="refresh()">
-            Refresh!
-        </button>
-        <button type="button" ng-click="takePhoto()">
-            Take Photo
-        </button>
-        
-        <div class="right">
+    <div class="row buttons-area">
+        <div class="state-area">
             <span>Timelapse: </span>
             <span ng-class="isTimelapseRunning ? 'state-running' : 'state-stopped'">{{ timelapseState }}</span>
             <span> | </span>
-            
+
             <a ng-click="startOrStopTimeplase()">{{ startStopButtonText }}</a>
+        </div>
+        
+        <div class="buttons">
+            <button type="button" ng-click="refresh()">Refresh</button>
+            <button type="button" ng-click="takePhoto()">Take a photo</button>
         </div>
     </div>
     
-    <div class="row buttons">
-       
-    </div>
-
     <div class="row photos">
         <div ng-repeat="img in photos" class="photo">
             <img ng-src="{{ img.url }}" title="{{ img.name }}"/>

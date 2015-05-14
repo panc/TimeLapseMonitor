@@ -3,10 +3,6 @@ body {
     padding-bottom: 20px;
 }
 
-.right {
-    float: right;
-}
-
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -20,16 +16,31 @@ body {
     white-space: normal;
 }
 
-.buttons {
+.buttons-area {
     margin-top: 20px;
 }
 
-.buttons::after {
+.buttons-area::after {
     clear: both;
 }
 
-.buttons a {
+.buttons-area a {
     cursor: pointer;
+}
+
+.state-area {
+    float: left;
+}
+
+.buttons {
+    float: right;
+}
+
+@media (max-width: 460px) {
+    .buttons {
+        float: left;
+        margin-top: 10px;
+    }
 }
 
 .state-running, .state-stopped {
