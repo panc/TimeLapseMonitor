@@ -3,6 +3,10 @@ body {
     padding-bottom: 20px;
 }
 
+.right {
+    float: right;
+}
+
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -18,6 +22,27 @@ body {
 
 .buttons {
     margin-top: 20px;
+}
+
+.buttons::after {
+    clear: both;
+}
+
+.buttons a {
+    cursor: pointer;
+}
+
+.state-running, .state-stopped {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.state-running {
+    color: #128810;
+}
+
+.state-stopped {
+    color: #9a1b1b;
 }
 
 .photos {

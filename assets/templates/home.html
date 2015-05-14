@@ -8,13 +8,18 @@
         <button type="button" ng-click="takePhoto()">
             Take Photo
         </button>
+        
+        <div class="right">
+            <span>Timelapse: </span>
+            <span ng-class="isTimelapseRunning ? 'state-running' : 'state-stopped'">{{ timelapseState }}</span>
+            <span> | </span>
+            
+            <a ng-click="startOrStopTimeplase()">{{ startStopButtonText }}</a>
+        </div>
     </div>
     
     <div class="row buttons">
-        <button type="button" ng-click="startOrStopTimeplase()">
-            {{ startStopButtonText }}
-        </button>
-        <span>{{ timelapseState }}</span>
+       
     </div>
 
     <div class="row photos">
