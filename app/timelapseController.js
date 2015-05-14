@@ -19,12 +19,12 @@ module.exports = function (settings, log) {
     
     // init file cache
     var files = fsHelper.mapFiles(PHOTOS_DIR, PHOTOS_FOLDER_NAME);
-    var thumbnails = fsHelper.mapFiles(THUMBNAILS_DIR, THUMBNAILS_FOLDER_NAME);
+    var thumbnails = fsHelper.mapFiles(THUMBNAILS_DIR, THUMBNAILS_FOLDER_NAME, PHOTOS_FOLDER_NAME);
     
     camera.on("exit", function (err, timestamp) {
 
         var file = files[files.length - 1];
-        var thumbnailName = "Tumb_" + file.name;
+        var thumbnailName = fsHelper.formatThumbnailName(file.name);
         var thumbnailFile = path.join(THUMBNAILS_DIR, thumbnailName);
 
         fs.exists(thumbnailFile , function (exists) {
@@ -40,7 +40,7 @@ module.exports = function (settings, log) {
 
         console.log('Creating thumbnail for "' + photo.name + '".');
 
-        thumbnails[thumbnails.length] = fsHelper.mapFile(thumbnailName, THUMBNAILS_FOLDER_NAME);
+        thumbnails[thumbnails.length] = fsHelper.mapFile(thumbnailName, THUMBNAILS_FOLDER_NAME, PHOTOS_FOLDER_NAME);
 
         var photoPath = path.join(PHOTOS_DIR, photo.name);
         var thumbPath = path.join(THUMBNAILS_DIR, thumbnailName);
