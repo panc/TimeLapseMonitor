@@ -86,7 +86,7 @@ module.exports = function (settings, log) {
     var reloadPhotos = function () {
         
         if (onNewPhotosCallback)
-            onNewPhotosCallback(thumbnails.slice(0, settings.numberOfPhotos));
+            onNewPhotosCallback(thumbnails.slice(thumbnails.length - settings.numberOfPhotos).reverse());
     };
     
     var getTimelapseState = function() {
