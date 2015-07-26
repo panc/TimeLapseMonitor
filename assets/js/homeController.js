@@ -32,7 +32,9 @@ angular.module('tlm')
             mapTimelapseState(isTimelapseRunning);
         });
         
-
+        socket.on('stream-changed', function (image) {
+            $scope.streamSource = image;
+        });
         
         socket.emit('request-timelapse-state', function (isTimelapseRunning) {
             mapTimelapseState(isTimelapseRunning);

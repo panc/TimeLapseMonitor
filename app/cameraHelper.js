@@ -1,4 +1,6 @@
+var fs = require('fs');
 var platform = require('os').platform();
+var spawn = require('child_process').spawn;
 
 module.exports = {
     createCamera: function () {
@@ -42,7 +44,7 @@ module.exports = {
         var timeoutHandle;
         var proc;
         
-        function startStreaming(io) {
+        function startStreaming() {
             
             if (proc) {
                 onStreamChangedCallback('image_stream.jpg?_t=' + (Math.random() * 100000));
@@ -54,8 +56,6 @@ module.exports = {
             
             console.log('Watching for changes...');
             
-            app.set('watchingFile', true);
-
             fs.watchFile('./stream/image_stream.jpg', function(current, previous) {
                 onStreamChangedCallback('image_stream.jpg?_t=' + (Math.random() * 100000));
             });
