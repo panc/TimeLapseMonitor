@@ -15,11 +15,6 @@
     </div>
     
     <div class="row photos" ng-hide="isStreaming">
-        <div class="buttons">
-            <button type="button" ng-click="refresh()">Refresh</button>
-            <button type="button" ng-click="takePhoto()">Take a photo</button>
-        </div>
-
         <div ng-repeat="img in photos" class="photo">
             <a href="{{ img.fullSizeUrl }}" target="_blank"><img ng-src=" {{ img.url }} " title=" {{ img.name }} " /></a>
         </div>
@@ -27,5 +22,11 @@
     
     <div class="row preview-stream" ng-show="isStreaming">
         <img ng-src="{{ streamSource }}">
+    </div>
+    
+    <div class="row buttons" ng-hide="isStreaming">
+        <span>Additional Actions:</span>
+        <button type="button" ng-click="refresh()">Refresh</button>
+        <button type="button" ng-click="takePhoto()">Take a photo</button>
     </div>
 </div>
