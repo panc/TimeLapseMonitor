@@ -7,6 +7,7 @@ var templatePath = __dirname + '/assets/templates/index.html';
 // setup routes
 app.use('/assets', express.static(__dirname + '/assets'));
 app.use('/camera', express.static(__dirname + '/camera'));
+app.use('/stream', express.static(__dirname + '/stream'));
 app.use('/thumbnails', express.static(__dirname + '/thumbnails'));
 app.use('/vendor', express.static(__dirname + '/bower_components'));
 

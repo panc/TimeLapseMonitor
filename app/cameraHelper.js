@@ -4,6 +4,7 @@ var platform = require('os').platform();
 var spawn = require('child_process').spawn;
 
 var STREAM_FILE = "image_stream.jpg";
+var STREAM_HTTP_NAME = 'stream/' + STREAM_FILE ;
 var STREAM_FILEPATH = path.join(__dirname + '/../stream', STREAM_FILE);
 
 module.exports = {
