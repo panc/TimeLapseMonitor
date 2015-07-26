@@ -42,7 +42,7 @@ _ReSharper*/
 *.DotSettings.user
 
 # Project Specific
-camera/
+camera/*.jpg
 thumbnails/
 obj/
 settings.json
