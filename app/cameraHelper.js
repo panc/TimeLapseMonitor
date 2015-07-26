@@ -1,6 +1,10 @@
+var path = require('path');
 var fs = require('fs');
 var platform = require('os').platform();
 var spawn = require('child_process').spawn;
+
+var STREAM_FILE = "image_stream.jpg";
+var STREAM_FILEPATH = path.join(__dirname + '/../stream', STREAM_FILE);
 
 module.exports = {
     createCamera: function () {
@@ -37,7 +41,8 @@ module.exports = {
 
     createStream: function () {
         
-        console.log("Streaming is not supported on windows!");
+        if (platform.indexOf("win") == 0)
+            console.log("Streaming is not supported on windows!");
             
         var onStoppedCallback;
         var onStreamChangedCallback;
@@ -47,17 +52,18 @@ module.exports = {
         function startStreaming() {
             
             if (proc) {
-                onStreamChangedCallback('image_stream.jpg?_t=' + (Math.random() * 100000));
+                onStreamChangedCallback(STREAM_FILE + '?_t=' + (Math.random() * 100000));
                 return;
             }
             
-            var args = ["-w", "640", "-h", "480", "-o", "./stream/image_stream.jpg", "-t", "999999999", "-tl", "100"];
+            var args = ["-w", "640", "-h", "480", "-o", STREAM_FILEPATH, "-t", "999999999", "-tl", "1000"];
             proc = spawn('raspistill', args);
             
             console.log('Watching for changes...');
             
-            fs.watchFile('./stream/image_stream.jpg', function(current, previous) {
-                onStreamChangedCallback('image_stream.jpg?_t=' + (Math.random() * 100000));
+            fs.watchFile(STREAM_FILEPATH, function(current, previous) {
+                onStreamChangedCallback(STREAM_FILE + '?_t=' + (Math.random() * 100000));
+                console.log("Stream file changed!");
             });
         }
         
@@ -71,7 +77,6 @@ module.exports = {
 
         return {
             start: function () {
-                console.log('Start dummy stream');
 
                 timeoutHandle = setTimeout(function () {
                         // wait one minute...
