@@ -38,6 +38,18 @@ io.on('connection', function (socket) {
         log.info('Timelapse stopped!');
     });
     
+    socket.on('start-stream', function () {
+        controller.stopTimelapse();
+        controller.startStream();
+
+        log.info('Stream started!');
+    });
+    
+    socket.on('stop-stream', function () {
+        controller.stopStream();
+        log.info('Stream stopped!');
+    });
+    
     socket.on('request-timelapse-state', function (callback) {
         callback(controller.getTimelapseState());
     });
@@ -74,6 +86,10 @@ controller.onNewPhotosAvailable(function(files) {
 
 controller.onStateChanged(function(state) {
     io.emit('timelapse-state-changed', state);
+});
+
+controller.onStreamChanged(function (image) {
+    io.emit('stream-changed', image);
 });
 
 http.listen(3000, function () {

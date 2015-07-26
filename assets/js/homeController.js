@@ -7,18 +7,22 @@ angular.module('tlm')
         $scope.refresh = function() {
             socket.emit('refresh-photos');
             // todo: disable button
-        }
-        
-        $scope.takePhoto = function () {
+        };
+
+        $scope.takePhoto = function() {
             socket.emit('take-photo');
             // todo: disable button
-        }
-        
-        $scope.startOrStopTimeplase = function () {
+        };
+
+        $scope.startOrStopTimeplase = function() {
             var method = $scope.isTimelapseRunning ? 'stop-timelapse' : 'start-timelapse';
             socket.emit(method);
             // todo: disable button
-        }
+        };
+
+        $scope.startPreview = function() {
+            socket.emit("start-stream");
+        };
 
         socket.on('new-photos', function(photos) {
             $scope.photos = photos;
@@ -27,6 +31,8 @@ angular.module('tlm')
         socket.on('timelapse-state-changed', function (isTimelapseRunning) {
             mapTimelapseState(isTimelapseRunning);
         });
+        
+
         
         socket.emit('request-timelapse-state', function (isTimelapseRunning) {
             mapTimelapseState(isTimelapseRunning);

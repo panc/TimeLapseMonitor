@@ -2,7 +2,8 @@ var path = require('path');
 var fs = require('fs');
 var fsHelper = require('./fsHelper')();
 var lwip = require('lwip');
-
+var cameraHelper = require('./cameraHelper');
+    
 var PHOTOS_FOLDER_NAME = 'camera';
 var PHOTOS_DIR = __dirname + '/../' + PHOTOS_FOLDER_NAME;
 
@@ -10,16 +11,26 @@ var THUMBNAILS_FOLDER_NAME = 'thumbnails';
 var THUMBNAILS_DIR = __dirname + '/../' + THUMBNAILS_FOLDER_NAME;
 
 module.exports = function (settings, log) {
-    
-    var camera = require('./cameraHelper').createCamera();
+
+    var camera = cameraHelper.createCamera();
+    var stream = cameraHelper.createStream();
 
     var onNewPhotosCallback;
     var onStateChangedCallback;
+    var onStreamChangedCallback;
     var intervalHandle;
     
     // init file cache
     var files = fsHelper.mapFiles(PHOTOS_DIR, PHOTOS_FOLDER_NAME);
     var thumbnails = fsHelper.mapFiles(THUMBNAILS_DIR, THUMBNAILS_FOLDER_NAME, PHOTOS_FOLDER_NAME);
+
+    stream.onStopped(function() {
+
+    });
+    
+    stream.onStreamChanged(function (image) {
+        onStreamChangedCallback(image);
+    });  
     
     camera.on("exit", function (err, timestamp) {
 
@@ -101,6 +112,10 @@ module.exports = function (settings, log) {
         onStateChanged: function(stateChangedCallback) {
             onStateChangedCallback = stateChangedCallback;
         },
+        
+        onStreamChanged: function (streamChangedCallback) {
+            onStreamChangedCallback = streamChangedCallback;
+        },
 
         takePhoto: takePhoto,
         
@@ -123,6 +138,14 @@ module.exports = function (settings, log) {
 
             if (onStateChangedCallback)
                 onStateChangedCallback(getTimelapseState());
+        },
+        
+        startStream: function() {
+            stream.start();
+        },
+        
+        stopStream: function () {
+            
         },
 
         getTimelapseState: getTimelapseState
