@@ -87,8 +87,8 @@ controller.onStateChanged(function(state) {
     io.emit('timelapse-state-changed', state);
 });
 
-controller.onStreamChanged(function (image) {
-    io.emit('stream-changed', image);
+controller.onStreamDataUpdated(function (image) {
+    io.emit('stream-data-changed', image);
 });
 
 http.listen(3000, function () {

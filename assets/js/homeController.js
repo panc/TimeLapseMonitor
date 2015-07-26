@@ -22,15 +22,10 @@ angular.module('tlm')
             // todo: disable button
         };
 
-        $scope.startPreview = function () {
-            if ($scope.showPreview) {
-                $scope.showPreview = false;
-                socket.emit("stop-stream");
-            }
-            else {
-                $scope.showPreview = true;
-                socket.emit("start-stream");   
-            }
+        $scope.startOrStopPreview = function () {
+            var method = $scope.isStreaming ? 'stop-stream' : 'start-stream';
+            socket.emit(method);
+            // todo: disable button
         };
 
         socket.on('new-photos', function(photos) {
@@ -41,18 +36,27 @@ angular.module('tlm')
             mapTimelapseState(isTimelapseRunning);
         });
         
-        socket.on('stream-changed', function (image) {
+        socket.on('stream-data-changed', function (image) {
             $scope.streamSource = image;
         });
         
-        socket.emit('request-timelapse-state', function (isTimelapseRunning) {
-            mapTimelapseState(isTimelapseRunning);
+        socket.emit('request-timelapse-state', function (state) {
+            mapTimelapseState(state);
         });
 
-        var mapTimelapseState = function(result) {
-            $scope.isTimelapseRunning = result.state;
-            $scope.timelapseState = result.state ? "Running" : "Stopped";
-            $scope.startStopButtonText = result.state ? "Stop Timelapse" : "Start Timelapse";
+        var mapTimelapseState = function (state) {
+            $scope.isTimelapseRunning = state.isTimelapseRunning;
+            $scope.isStreaming = state.isStreaming;
+
+            if (state.isTimelapseRunning)
+                $scope.timelapseState = "Running";
+            else if (state.isStreaming)
+                $scope.timelapseState = "Preview";
+            else
+                $scope.timelapseState = "Stopped";
+            
+            $scope.startStopButtonText = state.isTimelapseRunning ? "Stop Timelapse" : "Start Timelapse";
+            $scope.startOrStopPreviewText = state.isStreaming ? "Stop Preview" : "Start Preview";
         };
 
         $scope.refresh();

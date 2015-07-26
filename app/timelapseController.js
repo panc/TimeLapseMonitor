@@ -18,19 +18,19 @@ module.exports = function (settings, log) {
     var isTimelapseRunningBeforeStreaming;
     var onNewPhotosCallback;
     var onStateChangedCallback;
-    var onStreamChangedCallback;
+    var onStreamDataUpdatedCallback;
     var intervalHandle;
     
     // init file cache
     var files = fsHelper.mapFiles(PHOTOS_DIR, PHOTOS_FOLDER_NAME);
     var thumbnails = fsHelper.mapFiles(THUMBNAILS_DIR, THUMBNAILS_FOLDER_NAME, PHOTOS_FOLDER_NAME);
 
-    stream.onStopped(function() {
-
+    stream.onStateChanged(function() {
+        onStateChanged();
     });
     
-    stream.onStreamChanged(function (image) {
-        onStreamChangedCallback(image);
+    stream.onStreamDataUpdated(function (image) {
+        onStreamDataUpdatedCallback(image);
     });  
     
     camera.on("exit", function (err, timestamp) {
@@ -102,7 +102,16 @@ module.exports = function (settings, log) {
     };
     
     var getTimelapseState = function() {
-        return { state: intervalHandle != undefined };
+        return {
+            isTimelapseRunning: intervalHandle != undefined,
+            isStreaming: stream.isRunning()
+        };
+    }
+    
+    var onStateChanged = function() {
+        
+        if (onStateChangedCallback)
+            onStateChangedCallback(getTimelapseState());
     }
 
     var startTimelapse = function() {
@@ -110,8 +119,7 @@ module.exports = function (settings, log) {
 
         intervalHandle = setInterval(takePhoto, settings.timeLapseInterval);
 
-        if (onStateChangedCallback)
-            onStateChangedCallback(getTimelapseState());
+        onStateChanged();
     };
 
     var stopTimelapse = function() {
@@ -119,9 +127,8 @@ module.exports = function (settings, log) {
 
         clearInterval(intervalHandle);
         intervalHandle = undefined;
-
-        if (onStateChangedCallback)
-            onStateChangedCallback(getTimelapseState());
+        
+        onStateChanged();
     };
     
     return {
@@ -133,8 +140,8 @@ module.exports = function (settings, log) {
             onStateChangedCallback = stateChangedCallback;
         },
         
-        onStreamChanged: function (streamChangedCallback) {
-            onStreamChangedCallback = streamChangedCallback;
+        onStreamDataUpdated: function (callback) {
+            onStreamDataUpdatedCallback = callback;
         },
 
         takePhoto: takePhoto,
@@ -146,7 +153,7 @@ module.exports = function (settings, log) {
         stopTimelapse: stopTimelapse,
         
         startStream: function() {
-            isTimelapseRunningBeforeStreaming = getTimelapseState().state;
+            isTimelapseRunningBeforeStreaming = getTimelapseState().isTimelapseRunning;
             
             if (isTimelapseRunningBeforeStreaming)
                 stopTimelapse();

@@ -42,8 +42,8 @@ module.exports = {
 
     createStream: function () {
         
-        var onStoppedCallback;
-        var onStreamChangedCallback;
+        var onStateChangedCallback;
+        var onStreamDataUpdatedCallback;
         var timeoutHandle;
         var intervalHandle;
         var proc;
@@ -57,6 +57,8 @@ module.exports = {
                 console.log("Streaming is not supported on windows!");
             else
                 startStreaming();
+
+            onStateChangedCallback();
         }
 
         var stop = function() {
@@ -64,10 +66,11 @@ module.exports = {
             console.log("Stop streaming...");
 
             timeoutHandle = undefined;
-            onStoppedCallback();
 
             if (platform.indexOf("win") != 0)
                 stopStreaming();
+
+            onStateChangedCallback();
         };
 
         var startStreaming = function() {
@@ -84,11 +87,11 @@ module.exports = {
             console.log('Streaming started - watching for file changes.');
 
             intervalHandle = setInterval(function() {
-                onStreamChangedCallback(STREAM_HTTP_NAME + '?_t=' + (Math.random() * 100000));
+                onStreamDataUpdatedCallback(STREAM_HTTP_NAME + '?_t=' + (Math.random() * 100000));
             }, 500);
         }
         
-        function stopStreaming() {
+        var stopStreaming = function() {
             if (proc)
                 proc.kill();
 
@@ -102,12 +105,16 @@ module.exports = {
             
             stop: stop,
 
-            onStreamChanged: function(callback) {
-                onStreamChangedCallback = callback;
+            onStreamDataUpdated: function(callback) {
+                onStreamDataUpdatedCallback = callback;
             },
 
-            onStopped: function (callback) {
-                onStoppedCallback = callback;
+            onStateChanged: function (callback) {
+                onStateChangedCallback = callback;
+            },
+
+            isRunning: function() {
+                return timeoutHandle != undefined;
             }
         };
     }
