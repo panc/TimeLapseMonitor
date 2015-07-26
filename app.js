@@ -40,9 +40,7 @@ io.on('connection', function (socket) {
     });
     
     socket.on('start-stream', function () {
-        controller.stopTimelapse();
         controller.startStream();
-
         log.info('Stream started!');
     });
     

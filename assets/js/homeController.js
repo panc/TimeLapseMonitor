@@ -4,6 +4,8 @@ angular.module('tlm')
 .controller('homeController', [
     '$scope', 'socket', function($scope, socket) {
 
+        $scope.showPreview = false;
+
         $scope.refresh = function() {
             socket.emit('refresh-photos');
             // todo: disable button
@@ -20,8 +22,15 @@ angular.module('tlm')
             // todo: disable button
         };
 
-        $scope.startPreview = function() {
-            socket.emit("start-stream");
+        $scope.startPreview = function () {
+            if ($scope.showPreview) {
+                $scope.showPreview = false;
+                socket.emit("stop-stream");
+            }
+            else {
+                $scope.showPreview = true;
+                socket.emit("start-stream");   
+            }
         };
 
         socket.on('new-photos', function(photos) {

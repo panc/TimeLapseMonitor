@@ -42,69 +42,73 @@ module.exports = {
 
     createStream: function () {
         
-        if (platform.indexOf("win") == 0)
-            console.log("Streaming is not supported on windows!");
-            
         var onStoppedCallback;
         var onStreamChangedCallback;
         var timeoutHandle;
+        var intervalHandle;
         var proc;
         
-        function startStreaming() {
+        var start = function() {
             
+            // wait one minute then stop the stream ...
+            timeoutHandle = setTimeout(stop, 60000);
+            
+            if (platform.indexOf("win") == 0)
+                console.log("Streaming is not supported on windows!");
+            else
+                startStreaming();
+        }
+
+        var stop = function() {
+            
+            console.log("Stop streaming...");
+
+            timeoutHandle = undefined;
+            onStoppedCallback();
+
+            if (platform.indexOf("win") != 0)
+                stopStreaming();
+        };
+
+        var startStreaming = function() {
+            
+            // if streaming is aleady running, do not start it again
             if (proc) {
-                onStreamChangedCallback(STREAM_FILE + '?_t=' + (Math.random() * 100000));
+                console.log("Streaming is aleady running - do not start it again");
                 return;
             }
-            
-            var args = ["-w", "640", "-h", "480", "-o", STREAM_FILEPATH, "-t", "999999999", "-tl", "1000"];
+
+            var args = ["-w", "640", "-h", "480", "-o", STREAM_FILEPATH, "-t", "999999999", "-tl", "500"];
             proc = spawn('raspistill', args);
             
-            console.log('Watching for changes...');
-            
-            fs.watchFile(STREAM_FILEPATH, function(current, previous) {
-                onStreamChangedCallback(STREAM_FILE + '?_t=' + (Math.random() * 100000));
-                console.log("Stream file changed!");
-            });
+            console.log('Streaming started - watching for file changes.');
+
+            intervalHandle = setInterval(function() {
+                onStreamChangedCallback(STREAM_HTTP_NAME + '?_t=' + (Math.random() * 100000));
+            }, 500);
         }
         
         function stopStreaming() {
             if (proc)
                 proc.kill();
 
-            proc = null;
-            fs.unwatchFile('./stream/image_stream.jpg');
+            clearInterval(intervalHandle);
+            intervalHandle = undefined;
+            proc = undefined;
         }
 
         return {
-            start: function () {
-
-                timeoutHandle = setTimeout(function () {
-                        // wait one minute...
-                        timeoutHandle = null;
-                        onStoppedCallback();
-
-                        if (platform.indexOf("win") != 0)
-                            stopStreaming();
-                    },
-                    60000);
-
-                if (platform.indexOf("win") != 0)
-                    startStreaming();
-            },
+            start: start,
             
+            stop: stop,
+
             onStreamChanged: function(callback) {
                 onStreamChangedCallback = callback;
             },
 
             onStopped: function (callback) {
                 onStoppedCallback = callback;
-            },
-
-            stop: function() {
-                clearTimeout(timeoutHandle);
-                timeoutHandle = null;
-            },
+            }
         };
     }
 };

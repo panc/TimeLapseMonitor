@@ -15,6 +15,7 @@ module.exports = function (settings, log) {
     var camera = cameraHelper.createCamera();
     var stream = cameraHelper.createStream();
 
+    var isTimelapseRunningBeforeStreaming;
     var onNewPhotosCallback;
     var onStateChangedCallback;
     var onStreamChangedCallback;
@@ -103,6 +104,25 @@ module.exports = function (settings, log) {
     var getTimelapseState = function() {
         return { state: intervalHandle != undefined };
     }
+
+    var startTimelapse = function() {
+        console.log('Starting timelapse...');
+
+        intervalHandle = setInterval(takePhoto, settings.timeLapseInterval);
+
+        if (onStateChangedCallback)
+            onStateChangedCallback(getTimelapseState());
+    };
+
+    var stopTimelapse = function() {
+        console.log('Stopping timelapse...');
+
+        clearInterval(intervalHandle);
+        intervalHandle = undefined;
+
+        if (onStateChangedCallback)
+            onStateChangedCallback(getTimelapseState());
+    };
     
     return {
         onNewPhotosAvailable: function (newPhotosCallback) {
@@ -121,31 +141,25 @@ module.exports = function (settings, log) {
         
         triggerRefresh: reloadPhotos,
         
-        startTimelapse: function () {
-            console.log('Starting timelapse...');
-            
-            intervalHandle = setInterval(takePhoto, settings.timeLapseInterval);
+        startTimelapse: startTimelapse,
 
-            if (onStateChangedCallback)
-                onStateChangedCallback(getTimelapseState());
-        },
-
-        stopTimelapse: function () {
-            console.log('Stopping timelapse...');
-
-            clearInterval(intervalHandle);
-            intervalHandle = undefined;
-
-            if (onStateChangedCallback)
-                onStateChangedCallback(getTimelapseState());
-        },
+        stopTimelapse: stopTimelapse,
         
         startStream: function() {
+            isTimelapseRunningBeforeStreaming = getTimelapseState().state;
+            
+            if (isTimelapseRunningBeforeStreaming)
+                stopTimelapse();
+            
             stream.start();
         },
         
         stopStream: function () {
-            
+            // restart timelapse if needed
+            if (isTimelapseRunningBeforeStreaming)
+                startTimelapse();
+
+            stream.stop();
         },
 
         getTimelapseState: getTimelapseState
