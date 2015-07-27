@@ -5,6 +5,7 @@ angular.module('tlm')
     '$scope', 'socket', function($scope, socket) {
 
         $scope.showPreview = false;
+        $scope.streamSource = "/stream/not-supported.jpg";
 
         $scope.refresh = function() {
             socket.emit('refresh-photos');

@@ -53,6 +53,11 @@ body {
     margin-top: 20px;
 }
 
+.preview-stream img {
+    width: 100%;
+    max-width: 640px;
+}
+
 .photo {
     float: left;
 }
