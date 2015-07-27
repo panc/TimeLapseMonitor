@@ -2,7 +2,6 @@ var path = require('path');
 var fs = require('fs');
 var fsHelper = require('./fsHelper')();
 var lwip = require('lwip');
-var cameraHelper = require('./cameraHelper');
     
 var PHOTOS_FOLDER_NAME = 'camera';
 var PHOTOS_DIR = __dirname + '/../' + PHOTOS_FOLDER_NAME;
@@ -12,8 +11,8 @@ var THUMBNAILS_DIR = __dirname + '/../' + THUMBNAILS_FOLDER_NAME;
 
 module.exports = function (settings, log) {
 
-    var camera = cameraHelper.createCamera();
-    var stream = cameraHelper.createStream();
+    var camera = require('./cameraHelper').createCamera();
+    var stream = require('./streamHelper').createStream();
 
     var isTimelapseRunningBeforeStreaming;
     var onNewPhotosCallback;
