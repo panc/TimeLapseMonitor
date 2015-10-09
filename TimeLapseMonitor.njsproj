@@ -24,6 +24,7 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Compile Include="app.js" />
+    <Compile Include="app\streamHelper.js" />
     <Compile Include="app\log.js" />
     <Compile Include="app\settings.js" />
     <Compile Include="app\fsHelper.js" />
